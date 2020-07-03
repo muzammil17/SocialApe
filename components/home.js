@@ -1,42 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, AsyncStorage } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { signOut, getUserDetail } from "../actions/userAuthed";
+import { View, Text, FlatList } from "react-native";
 import { connect } from "react-redux";
-import { getToken } from "../utils/helper";
-import jwt_decode from "jwt-decode";
-import axios from "axios";
-import { Api } from "../actions/Api";
+import Scream from "./scream";
+import { getAllScreams, refreshTrue } from "../actions/screamActions";
+import FlatListItemSeparator from "./flatListComponents/itemSeperator";
+import FlatListHeader from "./flatListComponents/flatListHeader";
 
 const Home = (props) => {
-  const [token, settoken] = useState("");
-  const { dispatch } = props;
-  console.log(props);
+  const {
+    screams: { screams, refreshingHome },
+    dispatch,
+    user,
+  } = props;
 
-  useEffect(() => {
-    dispatch(getUserDetail());
-    console.log(axios.defaults.headers)
-  });
+  const [refresh, setRefresh] = useState(false);
 
-  useEffect(() => {
-    let tokenn = "";
-    let decoded = "";
-    getToken().then((data) => {
-      // console.log(data);
-      let initial = data ? data.split("Bearer ")[1] : null;
-      decoded = jwt_decode(initial);
-      // console.log(decoded);
-      let userId = decoded.user_id;
-    });
-  });
+  const getScreams = () => {
+    setRefresh(true);
+    dispatch(getAllScreams());
+    setTimeout(() => {
+      setRefresh(false);
+    }, 3000);
+  };
 
   return (
-    <View>
-      <TouchableOpacity onPress={() => dispatch(signOut())}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
+    <View style={{ flex: 1, backgroundColor: "hsl(0, 0%, 90%)" }}>
+      {/* <View style={{ flex: 1 }}>
+        <FlatListHeader user={user} />
+      </View> */}
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={screams ? screams : null}
+          renderItem={({ item }) => <Scream scream={item} />}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={FlatListItemSeparator}
+          refreshing={refresh}
+          onRefresh={getScreams}
+          ListHeaderComponent={() => <FlatListHeader user={user} />}
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
     </View>
   );
 };
 
-export default connect()(Home);
+const mapStateToProps = (state) => {
+  return {
+    screams: state.screams,
+    user: state.users.userCredential,
+  };
+};
+
+export default connect(mapStateToProps)(Home);

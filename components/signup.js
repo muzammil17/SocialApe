@@ -91,6 +91,7 @@ const Signup = (props) => {
               style={styles.inputElements}
               value={password}
               onChangeText={(text) => {
+                text = text.replace(/\s/g, "");
                 setPassword(text);
                 if (credentialError) {
                   dispatch(removeError());
@@ -110,6 +111,7 @@ const Signup = (props) => {
               placeholder="confirm password..."
               clearButtonMode="always"
               onChangeText={(text) => {
+                text = text.replace(/\s/g, "");
                 setConfirmPassword(text);
                 if (credentialError) {
                   dispatch(removeError());
@@ -220,7 +222,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    marginTop: 50
+    marginTop: 50,
   },
   inputElements: {
     width: "90%",

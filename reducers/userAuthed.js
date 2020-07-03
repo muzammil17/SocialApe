@@ -6,7 +6,10 @@ import {
   REMOVE_ERROR,
   USER_SIGNUP,
   LOADING_INDICATOR,
+  USER_DETAIL,
+  REFRESH_TOKEN,
 } from "../actions/userAuthed";
+import { USER_LIKED, USER_UNLIKED } from "../actions/screamActions";
 
 let initState = {
   isLoading: true,
@@ -14,6 +17,9 @@ let initState = {
   userToken: null,
   credentialError: "",
   loadingIndicator: false,
+  likes: [],
+  notifications: [],
+  userCredential: null,
 };
 
 function userAuthed(state = initState, action) {
@@ -43,6 +49,37 @@ function userAuthed(state = initState, action) {
         credentialError: "",
         loadingIndicator: false,
       };
+
+    case REFRESH_TOKEN:
+      return {
+        ...state,
+        userToken: action.token,
+        isLoading: false,
+      };
+
+    case USER_DETAIL:
+      return {
+        ...state,
+        userCredential: action.userData.credentials,
+        likes: [...state.likes, ...action.userData.likes],
+        notifications: [
+          ...state.notifications,
+          ...action.userData.notifications,
+        ],
+        loadingIndicator: false,
+        isLoading: false,
+      };
+    case USER_LIKED:
+      return {
+        ...state,
+        likes: [...state.likes, action.user],
+      };
+
+    case USER_UNLIKED:
+      return {
+        ...state,
+        likes: state.likes.filter((scream) => scream.screamId !== action.id),
+      };
     case SIGN_OUT:
       return {
         ...state,
@@ -50,12 +87,16 @@ function userAuthed(state = initState, action) {
         userToken: null,
         isLoading: false,
         credentialError: "",
+        likes: [],
+        notifications: [],
+        loadingIndicator: false,
       };
     case SIGNIN_ERROR:
       return {
         ...state,
         credentialError: action.error,
         loadingIndicator: false,
+        isLoading: false,
       };
     case REMOVE_ERROR:
       return {
@@ -68,6 +109,7 @@ function userAuthed(state = initState, action) {
       return {
         ...state,
         loadingIndicator: true,
+        isLoading: false,
       };
 
     default:

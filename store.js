@@ -1,7 +1,7 @@
 import middleware from "./middleware";
-import userAuthed from "./reducers/userAuthed";
+import reducer from "./reducers";
 import { createStore } from "redux";
 
-const store = createStore(userAuthed, middleware);
+const store = createStore(reducer, middleware);
 
 export default store;

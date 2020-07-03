@@ -31,6 +31,7 @@ const Login = (props) => {
     if (email !== "" && password !== "") {
       props.dispatch(userLoginAction({ email, password }));
       dispatch(loadingIndicatorAction());
+      console.log(email, password);
     }
   };
 
@@ -73,6 +74,7 @@ const Login = (props) => {
             style={styles.inputElements}
             value={password}
             onChangeText={(text) => {
+              text = text.replace(/\s/g, "");
               setPassword(text);
               if (credentialError.length > 0) {
                 dispatch(removeError());
@@ -178,7 +180,7 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    credentialError: state.credentialError,
+    credentialError: state.users.credentialError,
   };
 };
 

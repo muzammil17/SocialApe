@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return{
-    loading: state.loadingIndicator
+    loading: state.users.loadingIndicator
   }
 }
 
