@@ -1,9 +1,10 @@
-import React, { Component, useEffect, useState } from "react";
-import { View, Text, StatusBar, AsyncStorage, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StatusBar, AsyncStorage, Platform } from "react-native";
 import { connect } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, useHeaderHeight } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import axios from "axios";
 import Constants from "expo-constants";
 import jwt_decode from "jwt-decode";
@@ -29,24 +30,39 @@ import {
 import Home from "./components/home";
 import Login from "./components/login";
 import Signup from "./components/signup";
-import { Api } from "./actions/Api";
-
+import NewScream from "./components/newScream";
 // code
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const AndroidTab = createMaterialTopTabNavigator();
 
 const TabScreens = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen component={Home} name="Home" />
-    </Tab.Navigator>
+    <>
+      {Platform.OS === "ios" ? (
+        <Tab.Navigator
+          tabBarOptions={{
+            style: {
+              height: 56,
+            },
+          }}
+        >
+          <Tab.Screen component={Home} name="Home" />
+        </Tab.Navigator>
+      ) : (
+        <AndroidTab.Navigator>
+          <AndroidTab.Screen component={Home} name="home" />
+        </AndroidTab.Navigator>
+      )}
+    </>
   );
 };
 
 function StackScreens(props) {
   const [token, setToken] = useState("");
   const [timeOut, settimeOut] = useState(false);
+  // const header_navigation = useHeaderHeight();
 
   let [fontLoaded] = useFonts({
     "nunito-regular": Nunito_400Regular,
@@ -109,34 +125,54 @@ function StackScreens(props) {
   }
   if (fontLoaded) {
     return (
-      <Stack.Navigator initialRouteName="home">
+      <Stack.Navigator
+        initialRouteName="home"
+        screenOptions={{
+          headerStyle: {
+            height: 100,
+          },
+        }}
+      >
         {userToken ? (
-          <Stack.Screen
-            component={TabScreens}
-            name="home"
-            options={{
-              headerTitle: () => (
-                <View style={{flex: 1, flexDirection: "row",justifyContent:"center", alignItems: "center"}}>
-                  <Text
-                    style={{ color: "#FFF", fontFamily: "permanent-regular", fontSize: 20 }}
-                  >
-                    SOCIALAPE
-                  </Text>
-                  {/* <Image source={require("./images/icon.png")} style={{height: 5,}} /> */}
-                </View>
-              ),
-              title: "Social APe",
-              headerStyle: {
-                backgroundColor: "#337ab7",
-              },
-              headerTintColor: "#FFF",
-              headerTitleStyle: {
-                fontFamily: "permanent-regular",
-                fontSize: 40,
-              },
-              headerTitleAlign: "center",
-            }}
-          />
+          <>
+            <Stack.Screen
+              component={TabScreens}
+              name="home"
+              options={{
+                title: "SOCIALAPE",
+                headerTintColor: "#FFF",
+                headerTitleAlign: "center",
+                headerTitleStyle: {
+                  fontFamily: "permanent-regular",
+                  fontSize: 20,
+                },
+                headerStyle: {
+                  backgroundColor: "#337ab7",
+                },
+                headerStatusBarHeight: 0,
+              }}
+            />
+
+            <Stack.Screen
+              name="newScream"
+              component={NewScream}
+              options={({ navigation, route }) => ({
+                title: "New Scream",
+                headerTintColor: "#FFF",
+                headerTitleAlign: "center",
+                gestureEnabled: false,
+                headerTitleStyle: {
+                  fontFamily: "permanent-regular",
+                  fontSize: 20,
+                },
+                headerStyle: {
+                  backgroundColor: "#337ab7",
+                },
+                headerLeft: null,
+                headerStatusBarHeight: 0,
+              })}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen
@@ -144,6 +180,9 @@ function StackScreens(props) {
               name="Login"
               options={{
                 headerShown: false,
+                headerStyle: {
+                  height: 5,
+                },
               }}
             />
             <Stack.Screen
@@ -176,18 +215,16 @@ const AppStatusBar = ({ background, ...props }) => {
   );
 };
 
-class Router extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, backgroundColor: "#FFF" }}>
-        <AppStatusBar background={"#337ab7"} barStyle="light-content" />
-        <NavigationContainer>
-          <StackScreens {...this.props} />
-        </NavigationContainer>
-      </View>
-    );
-  }
-}
+const Router = (props) => {
+  return (
+    <View style={{ flex: 1, backgroundColor: "#FFF" }}>
+      <AppStatusBar background={"#337ab7"} barStyle="light-content" />
+      <NavigationContainer>
+        <StackScreens {...props} />
+      </NavigationContainer>
+    </View>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {

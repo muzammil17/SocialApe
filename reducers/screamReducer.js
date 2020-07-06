@@ -4,8 +4,8 @@ import {
   USER_UNLIKED,
   REFRESH_FALSE,
   REFRESH_TRUE,
+  ADD_SCREAM,
 } from "../actions/screamActions";
-import scream from "../components/scream";
 
 let initState = {
   screams: [],
@@ -59,6 +59,12 @@ const screamReducer = (state = initState, action) => {
       return {
         ...state,
         refreshingHome: true,
+      };
+
+    case ADD_SCREAM:
+      return {
+        ...state,
+        screams : [action.body,...state.screams]
       };
 
     default:

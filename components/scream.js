@@ -33,6 +33,7 @@ const Scream = ({ scream, like, likes, dispatch }) => {
     }
   }, [likes, like]);
 
+
   const onLikeButtonPress = () => {
     if (userLiked) {
       dispatch(unLikeScream(scream.id));
@@ -43,6 +44,8 @@ const Scream = ({ scream, like, likes, dispatch }) => {
       dispatch(likeScreamAction(user));
     }
   };
+
+  // console.log(scream)
 
   return (
     <View style={styles.container}>
@@ -164,6 +167,7 @@ const Scream = ({ scream, like, likes, dispatch }) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  // console.log(ownProps.scream)
   let screamId = ownProps.scream.id;
   return {
     like: state.users.likes.filter((scream) => scream.screamId === screamId),
@@ -181,14 +185,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     flexDirection: "column",
     // marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.0,
-    elevation: 1,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 1.0,
+    // elevation: 1,
   },
   paddingContainer: {
     paddingHorizontal: 10,

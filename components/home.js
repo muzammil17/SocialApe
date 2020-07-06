@@ -11,6 +11,7 @@ const Home = (props) => {
     screams: { screams, refreshingHome },
     dispatch,
     user,
+    navigation,
   } = props;
 
   const [refresh, setRefresh] = useState(false);
@@ -36,8 +37,10 @@ const Home = (props) => {
           ItemSeparatorComponent={FlatListItemSeparator}
           refreshing={refresh}
           onRefresh={getScreams}
-          ListHeaderComponent={() => <FlatListHeader user={user} />}
-          showsHorizontalScrollIndicator={false}
+          ListHeaderComponent={() => (
+            <FlatListHeader user={user} navigation={navigation} />
+          )}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </View>
