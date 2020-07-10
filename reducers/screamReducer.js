@@ -5,6 +5,7 @@ import {
   REFRESH_FALSE,
   REFRESH_TRUE,
   ADD_SCREAM,
+  ADD_COMMENT_COUNT,
 } from "../actions/screamActions";
 
 let initState = {
@@ -49,6 +50,20 @@ const screamReducer = (state = initState, action) => {
         }),
       };
 
+    case ADD_COMMENT_COUNT:
+      return {
+        ...state,
+        screams: state.screams.map((scream) => {
+          console.log("reducer", scream.id);
+          if (scream.id === action.id) {
+            return {
+              ...scream,
+              commentCount: scream.commentCount + 1,
+            };
+          } else return scream;
+        }),
+      };
+
     case REFRESH_FALSE:
       return {
         ...state,
@@ -64,7 +79,7 @@ const screamReducer = (state = initState, action) => {
     case ADD_SCREAM:
       return {
         ...state,
-        screams : [action.body,...state.screams]
+        screams: [action.body, ...state.screams],
       };
 
     default:

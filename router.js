@@ -31,6 +31,7 @@ import Home from "./components/home";
 import Login from "./components/login";
 import Signup from "./components/signup";
 import NewScream from "./components/newScream";
+import CommentScream from "./components/commentScream";
 // code
 
 const Stack = createStackNavigator();
@@ -127,11 +128,6 @@ function StackScreens(props) {
     return (
       <Stack.Navigator
         initialRouteName="home"
-        screenOptions={{
-          headerStyle: {
-            height: 100,
-          },
-        }}
       >
         {userToken ? (
           <>
@@ -156,7 +152,7 @@ function StackScreens(props) {
             <Stack.Screen
               name="newScream"
               component={NewScream}
-              options={({ navigation, route }) => ({
+              options={{
                 title: "New Scream",
                 headerTintColor: "#FFF",
                 headerTitleAlign: "center",
@@ -170,7 +166,26 @@ function StackScreens(props) {
                 },
                 headerLeft: null,
                 headerStatusBarHeight: 0,
-              })}
+              }}
+            />
+            <Stack.Screen
+              name="commentScream"
+              component={CommentScream}
+              options={{
+                title: "Add Comment",
+                headerTintColor: "#FFF",
+                headerTitleAlign: "center",
+                gestureEnabled: true,
+                headerTitleStyle: {
+                  fontFamily: "permanent-regular",
+                  fontSize: 20,
+                },
+                headerStyle: {
+                  backgroundColor: "#337ab7",
+                },
+                headerLeft: null,
+                headerStatusBarHeight: 0,
+              }}
             />
           </>
         ) : (

@@ -6,6 +6,7 @@ export const USER_UNLIKED = "USER_UNLIKED";
 export const REFRESH_FALSE = "REFRESH_FALSE";
 export const REFRESH_TRUE = "REFRESH_TRUE";
 export const ADD_SCREAM = "ADD_SCREAM";
+export const ADD_COMMENT_COUNT = "ADD_COMMENT_COUNT";
 
 export const getScreams = (screams) => {
   return {
@@ -23,6 +24,13 @@ export const refreshTrue = () => {
 export const refreshFalse = () => {
   return {
     type: REFRESH_FALSE,
+  };
+};
+
+export const addCommentCount = (id) => {
+  return {
+    type: ADD_COMMENT_COUNT,
+    id,
   };
 };
 

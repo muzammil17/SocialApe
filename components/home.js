@@ -26,13 +26,12 @@ const Home = (props) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "hsl(0, 0%, 90%)" }}>
-      {/* <View style={{ flex: 1 }}>
-        <FlatListHeader user={user} />
-      </View> */}
       <View style={{ flex: 1 }}>
         <FlatList
           data={screams ? screams : null}
-          renderItem={({ item }) => <Scream scream={item} />}
+          renderItem={({ item }) => (
+            <Scream scream={item} navigation={navigation} />
+          )}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={FlatListItemSeparator}
           refreshing={refresh}

@@ -21,7 +21,7 @@ import {
   unLikeScreamAction,
 } from "../actions/screamActions";
 
-const Scream = ({ scream, like, likes, dispatch }) => {
+const Scream = ({ scream, like, likes, dispatch, navigation }) => {
   const [userLiked, setUserLiked] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,6 @@ const Scream = ({ scream, like, likes, dispatch }) => {
     }
   }, [likes, like]);
 
-
   const onLikeButtonPress = () => {
     if (userLiked) {
       dispatch(unLikeScream(scream.id));
@@ -44,8 +43,6 @@ const Scream = ({ scream, like, likes, dispatch }) => {
       dispatch(likeScreamAction(user));
     }
   };
-
-  // console.log(scream)
 
   return (
     <View style={styles.container}>
@@ -110,7 +107,11 @@ const Scream = ({ scream, like, likes, dispatch }) => {
               </TouchableOpacity>
             )}
 
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("commentScream", { scream })
+              }
+            >
               <FontAwesome
                 name="comment-o"
                 size={26}
@@ -184,15 +185,6 @@ const styles = StyleSheet.create({
     alignContent: "center",
     backgroundColor: "#FFF",
     flexDirection: "column",
-    // marginBottom: 10,
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 1.0,
-    // elevation: 1,
   },
   paddingContainer: {
     paddingHorizontal: 10,
